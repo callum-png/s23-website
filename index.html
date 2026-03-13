@@ -95,21 +95,23 @@
     /* Logo */
     .loader-logo-clip {
       overflow: hidden;
-      padding-bottom: 4px;
+      padding-bottom: 2px;
     }
     #loader-logo-text {
       font-family: 'Syne', sans-serif;
       font-weight: 800;
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      letter-spacing: 0.18em;
-      margin-right: -0.18em; /* compensate trailing letter-spacing so it centres perfectly */
+      font-size: clamp(2rem, 5vw, 3rem);
+      letter-spacing: 0.06em;
+      margin-right: -0.06em;
       text-transform: uppercase;
       color: var(--text);
+      line-height: 1;
+      font-feature-settings: "lnum" 1, "tnum" 1; /* force lining numerals to match cap height */
       display: block;
       transform: translateY(110%);
       animation: loaderSlideUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s;
     }
-    #loader-logo-text b { color: var(--accent); font-weight: 800; }
+    #loader-logo-text b { color: var(--accent); font-weight: 800; font-style: normal; }
 
     /* Divider line */
     #loader-line {
@@ -761,7 +763,7 @@
     <div id="loader-bottom"></div>
     <div id="loader-content">
       <div class="loader-logo-clip">
-        <span id="loader-logo-text">S23<b>.</b></span>
+        <span id="loader-logo-text">S23<span style="color:var(--accent)">.</span></span>
       </div>
       <div id="loader-line"></div>
       <div class="loader-sub-clip">
