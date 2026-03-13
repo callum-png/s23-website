@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S23 Operations Ltd — London</title>
+  <meta name="description" content="S23 Operations Ltd is a London-based holding company building the infrastructure for modern brand growth — through data-driven influencer marketing, proprietary software, and consumer platforms." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;0,9..144,700;1,9..144,200;1,9..144,300;1,9..144,400&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #090909;
+      --surface: #111111;
+      --surface-2: #161616;
+      --border: #1C1C1C;
+      --border-light: #242424;
+      --text: #EDE8DE;
+      --muted: #5C5C5C;
+      --muted-light: #888;
+      --accent: #C9FF47;
+      --accent-dim: rgba(201, 255, 71, 0.08);
+      --accent-mid: rgba(201, 255, 71, 0.15);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── GRAIN ─────────────────────────────────────── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 200;
+      opacity: 0.20;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    }
+
+    /* ── CURSOR ────────────────────────────────────── */
+    #c-dot {
+      width: 8px; height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: difference;
+      transition: transform 0.08s ease;
+    }
+    #c-ring {
+      width: 40px; height: 40px;
+      border: 1px solid rgba(201,255,71,0.35);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    /* ── NAV ───────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 28px 52px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.4s, border-color 0.4s;
+      border-bottom: 1px solid transparent;
+    }
+    nav.stuck {
+      background: rgba(9,9,9,0.88);
+      backdrop-filter: blur(16px);
+      border-color: var(--border);
+    }
+    .nav-logo {
+      font-weight: 800; font-size: 0.85rem;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--text); text-decoration: none;
+    }
+    .nav-logo b { color: var(--accent); font-weight: 800; }
+    .nav-links { display: flex; gap: 44px; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+      font-weight: 700; color: var(--bg); background: var(--accent);
+      padding: 11px 22px; text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.82; }
+
+    /* ── HERO ──────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 0 52px 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero-glow {
+      position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 55% 45% at 65% 25%, rgba(201,255,71,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 35% at 15% 75%, rgba(201,255,71,0.04) 0%, transparent 55%);
+    }
+    .hero-eyebrow {
+      font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 36px;
+      opacity: 0; transform: translateY(12px);
+      animation: fu 0.7s ease forwards 0.4s;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .hero-eyebrow::before {
+      content: ''; width: 28px; height: 1px; background: var(--accent);
+    }
+    .hero-h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(4.5rem, 11vw, 12.5rem);
+      font-weight: 200;
+      line-height: 0.88;
+      letter-spacing: -0.03em;
+      margin-bottom: 56px;
+    }
+    .hero-h1 .ln { display: block; overflow: hidden; }
+    .hero-h1 .ln-i {
+      display: block;
+      opacity: 0; transform: translateY(105%);
+      animation: su 1s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .hero-h1 .ln:nth-child(1) .ln-i { animation-delay: 0.55s; }
+    .hero-h1 .ln:nth-child(2) .ln-i { animation-delay: 0.7s; }
+    .hero-h1 .ln:nth-child(3) .ln-i { animation-delay: 0.85s; }
+    .hero-h1 em { font-style: italic; color: var(--accent); }
+    .hero-footer {
+      display: flex; align-items: flex-end;
+      justify-content: space-between; gap: 48px;
+    }
+    .hero-desc {
+      max-width: 400px; font-size: 0.95rem; line-height: 1.75;
+      color: var(--muted);
+      opacity: 0; transform: translateY(14px);
+      animation: fu 0.8s ease forwards 1.25s;
+    }
+    .hero-kpis {
+      text-align: right;
+      opacity: 0; animation: fu 0.8s ease forwards 1.45s;
+    }
+    .hero-kpis p {
+      font-size: 0.68rem; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted); line-height: 2.2;
+    }
+    .hero-kpis p strong { color: var(--text); }
+    .hero-scroll {
+      display: flex; align-items: center; gap: 14px; margin-top: 52px;
+      opacity: 0; animation: fu 0.8s ease forwards 1.65s;
+    }
+    .hero-scroll-bar { width: 52px; height: 1px; background: var(--accent); }
+    .hero-scroll span {
+      font-size: 0.64rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--muted);
+    }
+
+    /* ── TICKER ────────────────────────────────────── */
+    .ticker {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 15px 0; overflow: hidden; white-space: nowrap;
+    }
+    .ticker-track {
+      display: inline-flex; gap: 0;
+      animation: tick 28s linear infinite;
+    }
+    .ticker-track:hover { animation-play-state: paused; }
+    .t-item {
+      font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--muted); padding: 0 40px;
+      display: flex; align-items: center; gap: 40px;
+      border-right: 1px solid var(--border);
+    }
+    .t-item span { color: var(--accent); font-size: 0.5rem; }
+
+    /* ── SECTION SHELL ─────────────────────────────── */
+    .sec { padding: 128px 52px; }
+    .sec-label {
+      font-size: 0.63rem; letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 56px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .sec-label::before { content: ''; width: 28px; height: 1px; background: var(--accent); }
+
+    /* ── ABOUT ─────────────────────────────────────── */
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: start;
+    }
+    .about-h2 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2.8rem, 5.5vw, 5.5rem);
+      font-weight: 200; line-height: 1.05; letter-spacing: -0.025em;
+    }
+    .about-h2 em { font-style: italic; color: var(--accent); }
+    .about-body p {
+      font-size: 0.95rem; line-height: 1.82; color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .about-body p strong { color: var(--text); font-weight: 600; }
+    .stats-row {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 0; margin-top: 80px;
+      border-top: 1px solid var(--border);
+      border-left: 1px solid var(--border);
+    }
+    .stat-cell {
+      padding: 36px 32px;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stat-n {
+      font-family: 'Fraunces', serif; font-size: 3.2rem;
+      font-weight: 200; line-height: 1; margin-bottom: 10px;
+    }
+    .stat-n b { color: var(--accent); font-weight: 200; }
+    .stat-l {
+      font-size: 0.65rem; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--muted);
+    }
+
+    /* ── CLIENTS ───────────────────────────────────── */
+    .clients-sec { padding: 80px 52px; background: var(--surface); }
+    .clients-label {
+      font-size: 0.62rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 40px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .clients-label::before { content: ''; width: 24px; height: 1px; background: var(--muted); }
+    .clients-scroll {
+      display: flex; gap: 0; flex-wrap: wrap;
+      border-top: 1px solid var(--border-light);
+    }
+    .client-name {
+      padding: 22px 36px;
+      font-size: 0.78rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted);
+      border-right: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+      transition: color 0.2s, background 0.2s;
+    }
+    .client-name:hover { color: var(--text); background: var(--surface-2); }
+
+    /* ── PORTFOLIO ─────────────────────────────────── */
+    .portfolio-intro {
+      margin-bottom: 56px;
+    }
+    .portfolio-h2 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2.8rem, 5vw, 5rem);
+      font-weight: 200; letter-spacing: -0.025em; line-height: 1.05;
+    }
+    .portfolio-cards {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+    }
+    .p-card {
+      position: relative; overflow: hidden;
+      background: var(--surface); padding: 60px 56px 100px;
+      text-decoration: none; color: inherit; display: block;
+      transition: background 0.35s;
+    }
+    .p-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(130deg, var(--accent-mid) 0%, transparent 55%);
+      opacity: 0; transition: opacity 0.45s;
+    }
+    .p-card:hover::before { opacity: 1; }
+    .p-card:hover { background: var(--surface-2); }
+    .p-card-idx {
+      font-size: 0.63rem; letter-spacing: 0.26em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 52px;
+    }
+    .p-card-name {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      font-weight: 200; line-height: 0.92;
+      letter-spacing: -0.025em; margin-bottom: 10px;
+    }
+    .p-card-sub {
+      font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 36px;
+    }
+    .p-card-desc {
+      font-size: 0.88rem; line-height: 1.78; color: var(--muted);
+      max-width: 380px;
+    }
+    .p-card-tags {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-top: 40px;
+    }
+    .p-tag {
+      font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+      border: 1px solid var(--border-light); padding: 6px 13px;
+      color: var(--muted); transition: all 0.2s;
+    }
+    .p-card:hover .p-tag {
+      border-color: rgba(201,255,71,0.28); color: var(--text);
+    }
+    .p-card-arrow {
+      position: absolute; bottom: 52px; right: 52px;
+      width: 52px; height: 52px; border: 1px solid var(--border-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; color: var(--muted);
+      transition: all 0.3s ease;
+    }
+    .p-card:hover .p-card-arrow {
+      background: var(--accent); border-color: var(--accent);
+      color: var(--bg); transform: rotate(45deg);
+    }
+
+    /* ── CAPABILITIES ──────────────────────────────── */
+    .cap-header { margin-bottom: 64px; }
+    .cap-h2 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2.5rem, 4.5vw, 4.5rem);
+      font-weight: 200; letter-spacing: -0.025em; line-height: 1.05;
+    }
+    .cap-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      background: var(--border); gap: 1px;
+    }
+    .cap-item {
+      background: var(--bg); padding: 52px 44px;
+      transition: background 0.3s;
+    }
+    .cap-item:hover { background: var(--surface); }
+    .cap-n {
+      font-family: 'Fraunces', serif; font-size: 4.5rem;
+      font-weight: 200; color: var(--border-light);
+      line-height: 1; margin-bottom: 28px;
+      transition: color 0.3s;
+    }
+    .cap-item:hover .cap-n { color: var(--border); }
+    .cap-title {
+      font-size: 0.88rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-bottom: 16px; color: var(--text);
+    }
+    .cap-desc {
+      font-size: 0.84rem; line-height: 1.75; color: var(--muted);
+    }
+
+    /* ── TALENT CALLOUT ────────────────────────────── */
+    .talent-sec {
+      padding: 80px 52px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .talent-inner {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 48px;
+      flex-wrap: wrap;
+    }
+    .talent-copy h3 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.8rem, 3vw, 3rem);
+      font-weight: 200; letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .talent-copy h3 em { font-style: italic; color: var(--accent); }
+    .talent-copy p {
+      font-size: 0.88rem; color: var(--muted); line-height: 1.7;
+      max-width: 420px;
+    }
+    .talent-names {
+      display: flex; gap: 2px; flex-wrap: wrap;
+    }
+    .t-name {
+      padding: 18px 28px;
+      font-size: 0.78rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted);
+      border: 1px solid var(--border-light);
+      transition: all 0.2s;
+    }
+    .t-name:hover { color: var(--text); border-color: var(--border); background: var(--surface-2); }
+
+    /* ── CONTACT ───────────────────────────────────── */
+    .contact-sec {
+      padding: 128px 52px;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+    }
+    .contact-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 96px; align-items: start;
+    }
+    .contact-left h2 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(3rem, 6vw, 6.5rem);
+      font-weight: 200; line-height: 0.92;
+      letter-spacing: -0.03em; margin-bottom: 32px;
+    }
+    .contact-left h2 em { font-style: italic; color: var(--accent); }
+    .contact-left p {
+      font-size: 0.92rem; line-height: 1.8;
+      color: var(--muted); margin-bottom: 48px;
+      max-width: 380px;
+    }
+    .contact-details { display: flex; flex-direction: column; gap: 20px; }
+    .contact-detail {
+      display: flex; align-items: flex-start; gap: 16px;
+    }
+    .contact-detail-label {
+      font-size: 0.62rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--muted);
+      min-width: 80px; padding-top: 2px;
+    }
+    .contact-detail-val {
+      font-size: 0.88rem; color: var(--text); line-height: 1.6;
+    }
+    .contact-detail-val a {
+      color: var(--text); text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .contact-detail-val a:hover {
+      color: var(--accent); border-color: var(--accent);
+    }
+    /* Form */
+    .contact-form { display: flex; flex-direction: column; gap: 2px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+    .form-field { display: flex; flex-direction: column; }
+    .form-field label {
+      font-size: 0.62rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--muted);
+      padding: 16px 20px 8px; background: var(--surface);
+    }
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      background: var(--surface); border: none;
+      border-bottom: 1px solid var(--border);
+      color: var(--text); font-family: 'Syne', sans-serif;
+      font-size: 0.9rem; padding: 12px 20px 18px;
+      outline: none; transition: border-color 0.2s, background 0.2s;
+      -webkit-appearance: none; appearance: none;
+    }
+    .form-field select { cursor: none; }
+    .form-field select option { background: var(--surface-2); }
+    .form-field textarea { resize: none; min-height: 140px; }
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      background: var(--surface-2);
+      border-color: var(--accent);
+    }
+    .form-field input::placeholder,
+    .form-field textarea::placeholder { color: var(--muted); }
+    .form-submit {
+      background: var(--accent); color: var(--bg);
+      border: none; padding: 20px 40px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      cursor: none; transition: opacity 0.2s;
+      margin-top: 2px;
+    }
+    .form-submit:hover { opacity: 0.85; }
+    .form-success {
+      display: none; padding: 48px;
+      background: var(--surface); text-align: center;
+    }
+    .form-success.show { display: block; }
+    .form-success h3 {
+      font-family: 'Fraunces', serif; font-size: 2.2rem;
+      font-weight: 200; color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .form-success p { font-size: 0.88rem; color: var(--muted); }
+    @media (max-width: 900px) {
+      .contact-inner { grid-template-columns: 1fr; gap: 56px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    /* ── FOOTER ────────────────────────────────────── */
+    footer {
+      padding: 52px 52px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 24px;
+    }
+    .footer-logo {
+      font-weight: 800; font-size: 0.85rem;
+      letter-spacing: 0.22em; text-transform: uppercase;
+    }
+    .footer-logo b { color: var(--accent); }
+    .footer-links { display: flex; gap: 36px; list-style: none; }
+    .footer-links a {
+      font-size: 0.68rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--muted);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy {
+      font-size: 0.65rem; color: var(--muted); letter-spacing: 0.08em;
+    }
+
+    /* ── REVEAL ────────────────────────────────────── */
+    .rv {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.85s ease, transform 0.85s ease;
+    }
+    .rv.on { opacity: 1; transform: translateY(0); }
+    .rv.d1 { transition-delay: 0.1s; }
+    .rv.d2 { transition-delay: 0.2s; }
+    .rv.d3 { transition-delay: 0.3s; }
+    .rv.d4 { transition-delay: 0.4s; }
+
+    /* ── KEYFRAMES ─────────────────────────────────── */
+    @keyframes fu {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes su {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes tick {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── RESPONSIVE ────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      .nav-links { display: none; }
+      .hero { padding: 0 24px 60px; }
+      .sec { padding: 80px 24px; }
+      .about-grid { grid-template-columns: 1fr; gap: 48px; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .portfolio-cards { grid-template-columns: 1fr; }
+      .cap-grid { grid-template-columns: 1fr 1fr; }
+      .talent-inner { flex-direction: column; align-items: flex-start; }
+      footer { flex-direction: column; gap: 20px; }
+      .clients-sec { padding: 60px 24px; }
+      .talent-sec { padding: 60px 24px; }
+    }
+    @media (max-width: 560px) {
+      .stats-row { grid-template-columns: 1fr; }
+      .cap-grid { grid-template-columns: 1fr; }
+      .hero-footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CURSOR -->
+  <div id="c-dot"></div>
+  <div id="c-ring"></div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">S23<b>.</b></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#capabilities">Capabilities</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Work With Us</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <p class="hero-eyebrow">S23 Operations Ltd &nbsp;·&nbsp; London, UK &nbsp;·&nbsp; Est. 2024</p>
+    <h1 class="hero-h1">
+      <span class="ln"><span class="ln-i">The Operating</span></span>
+      <span class="ln"><span class="ln-i">System for <em>Modern</em></span></span>
+      <span class="ln"><span class="ln-i">Brand Growth.</span></span>
+    </h1>
+    <div class="hero-footer">
+      <p class="hero-desc">
+        A London-based holding company at the intersection of influencer marketing, proprietary technology, and consumer software — built to scale brands that matter.
+      </p>
+      <div class="hero-kpis">
+        <p><strong>50M+</strong> &nbsp;Engaged Customers</p>
+        <p><strong>150+</strong> &nbsp;Verified Creators</p>
+        <p><strong>4.3×</strong> &nbsp;Average ROAS</p>
+        <p><strong>50+</strong> &nbsp;Brand Partners</p>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="hero-scroll-bar"></div>
+      <span>Scroll to explore</span>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-track">
+      <div class="t-item">Influencer Marketing <span>✦</span></div>
+      <div class="t-item">Data Strategy <span>✦</span></div>
+      <div class="t-item">Consumer Apps <span>✦</span></div>
+      <div class="t-item">Proprietary Software <span>✦</span></div>
+      <div class="t-item">Talent Management <span>✦</span></div>
+      <div class="t-item">Performance Marketing <span>✦</span></div>
+      <div class="t-item">Creative Production <span>✦</span></div>
+      <div class="t-item">Media Buying <span>✦</span></div>
+      <div class="t-item">Brand Growth <span>✦</span></div>
+      <!-- Duplicate for seamless loop -->
+      <div class="t-item">Influencer Marketing <span>✦</span></div>
+      <div class="t-item">Data Strategy <span>✦</span></div>
+      <div class="t-item">Consumer Apps <span>✦</span></div>
+      <div class="t-item">Proprietary Software <span>✦</span></div>
+      <div class="t-item">Talent Management <span>✦</span></div>
+      <div class="t-item">Performance Marketing <span>✦</span></div>
+      <div class="t-item">Creative Production <span>✦</span></div>
+      <div class="t-item">Media Buying <span>✦</span></div>
+      <div class="t-item">Brand Growth <span>✦</span></div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="sec" id="about">
+    <div class="sec-label">About S23</div>
+    <div class="about-grid">
+      <div class="about-left rv">
+        <h2 class="about-h2">Where <em>Data</em><br>Meets<br>Culture.</h2>
+      </div>
+      <div class="about-body">
+        <p class="rv d1">
+          S23 Operations Ltd is a <strong>London-based holding company</strong> building the infrastructure that powers modern brand growth. We own and operate a portfolio of companies at the intersection of marketing technology, creator media, and consumer software.
+        </p>
+        <p class="rv d2">
+          We don't run campaigns in isolation — we build the <strong>systems, proprietary tools, and expert teams</strong> that make growth scalable, measurable, and repeatable. Our subsidiaries work in concert, each reinforcing the other with first-party data and platform intelligence.
+        </p>
+        <p class="rv d3">
+          Think of us as an <strong>influencer marketing agency powered by data and strategy</strong>, hosted by our own software platform — with the reach of an agency and the precision of a technology company.
+        </p>
+      </div>
+    </div>
+    <div class="stats-row rv d2">
+      <div class="stat-cell">
+        <div class="stat-n">50M<b>+</b></div>
+        <div class="stat-l">Engaged Customers</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-n">150<b>+</b></div>
+        <div class="stat-l">Verified Creators</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-n">4.3<b>×</b></div>
+        <div class="stat-l">Average ROAS Increase</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-n">50<b>+</b></div>
+        <div class="stat-l">Brand Partners</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLIENTS -->
+  <div class="clients-sec">
+    <div class="clients-label">Brands We've Worked With</div>
+    <div class="clients-scroll">
+      <div class="client-name">Whop</div>
+      <div class="client-name">BKFC</div>
+      <div class="client-name">Snapchat</div>
+      <div class="client-name">TikTok</div>
+      <div class="client-name">Cal AI</div>
+      <div class="client-name">Block Blast</div>
+      <div class="client-name">StealthGPT</div>
+      <div class="client-name">Quizard AI</div>
+      <div class="client-name">Haven</div>
+      <div class="client-name">Alpha Lion</div>
+      <div class="client-name">Bucked Up</div>
+      <div class="client-name">C4 Energy</div>
+      <div class="client-name">Sweatcoin</div>
+      <div class="client-name">PrizePicks</div>
+      <div class="client-name">Olive</div>
+      <div class="client-name">MenuFit</div>
+      <div class="client-name">1st Phorm</div>
+    </div>
+  </div>
+
+  <!-- PORTFOLIO -->
+  <section class="sec" id="portfolio">
+    <div class="sec-label">Our Portfolio</div>
+    <div class="portfolio-intro rv">
+      <h2 class="portfolio-h2">Built to Scale.<br>Designed to Last.</h2>
+    </div>
+    <div class="portfolio-cards">
+      <a href="https://socialsculp.io" target="_blank" rel="noopener" class="p-card rv">
+        <div class="p-card-idx">01 — Influencer Marketing</div>
+        <div class="p-card-name">SocialSculp</div>
+        <div class="p-card-sub">Social Media Sculptors</div>
+        <div class="p-card-desc">
+          A data-driven influencer marketing agency connecting brands with 150+ verified creators across TikTok, Instagram, and X. Guaranteed CPM performance, 4.3× average ROAS, and campaigns that have reached over 50 million people.
+        </div>
+        <div class="p-card-tags">
+          <span class="p-tag">Influencer Marketing</span>
+          <span class="p-tag">Talent Representation</span>
+          <span class="p-tag">Media Buying</span>
+          <span class="p-tag">Creative Production</span>
+          <span class="p-tag">Performance Marketing</span>
+        </div>
+        <div class="p-card-arrow">↗</div>
+      </a>
+      <a href="https://sylcroad.com" target="_blank" rel="noopener" class="p-card rv d1">
+        <div class="p-card-idx">02 — Proprietary Software</div>
+        <div class="p-card-name">Sylc<br>Road</div>
+        <div class="p-card-sub">Consumer Platform</div>
+        <div class="p-card-desc">
+          A next-generation consumer app and software platform — the proprietary technology stack that powers S23's data infrastructure, campaign intelligence, creator analytics, and brand reporting at scale.
+        </div>
+        <div class="p-card-tags">
+          <span class="p-tag">Consumer App</span>
+          <span class="p-tag">Software Platform</span>
+          <span class="p-tag">Campaign Intelligence</span>
+          <span class="p-tag">Creator Analytics</span>
+        </div>
+        <div class="p-card-arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- CAPABILITIES -->
+  <section class="sec" id="capabilities">
+    <div class="sec-label">What We Do</div>
+    <div class="cap-header rv">
+      <h2 class="cap-h2">The full stack of<br>modern brand growth.</h2>
+    </div>
+    <div class="cap-grid">
+      <div class="cap-item rv">
+        <div class="cap-n">01</div>
+        <div class="cap-title">Influencer Strategy</div>
+        <div class="cap-desc">Data-driven creator selection and campaign architecture. We match brands with creators whose audiences actually convert — not just scroll.</div>
+      </div>
+      <div class="cap-item rv d1">
+        <div class="cap-n">02</div>
+        <div class="cap-title">Creative Production</div>
+        <div class="cap-desc">End-to-end content creation from concept to distribution. Culturally intelligent work built for the platforms that move culture.</div>
+      </div>
+      <div class="cap-item rv d2">
+        <div class="cap-n">03</div>
+        <div class="cap-title">Performance Marketing</div>
+        <div class="cap-desc">PPV and CPM-optimised campaigns with guaranteed performance benchmarks. Every pound spent is tracked, attributed, and accountable.</div>
+      </div>
+      <div class="cap-item rv">
+        <div class="cap-n">04</div>
+        <div class="cap-title">Talent Management</div>
+        <div class="cap-desc">Premier representation for digital creators — brand deal negotiation, monetisation strategy, and long-term career development.</div>
+      </div>
+      <div class="cap-item rv d1">
+        <div class="cap-n">05</div>
+        <div class="cap-title">Proprietary Technology</div>
+        <div class="cap-desc">Custom-built software that powers everything we do — from campaign tracking and creator analytics to live brand dashboards.</div>
+      </div>
+      <div class="cap-item rv d2">
+        <div class="cap-n">06</div>
+        <div class="cap-title">Consumer Apps</div>
+        <div class="cap-desc">Building consumer-facing platforms that grow audiences, retain users, and create new channels for brand engagement at scale.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TALENT CALLOUT -->
+  <div class="talent-sec">
+    <div class="talent-inner">
+      <div class="talent-copy rv">
+        <h3>We work with<br>the <em>biggest</em> names.</h3>
+        <p>Our talent network spans household names and rising stars — from world-champion athletes to the internet's most-watched creators.</p>
+      </div>
+      <div class="talent-names rv d1">
+        <div class="t-name">Ashton Hall</div>
+        <div class="t-name">iShowSpeed</div>
+        <div class="t-name">Rob Gronkowski</div>
+        <div class="t-name">Allen Iverson</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <section class="contact-sec" id="contact">
+    <div class="sec-label">Get In Touch</div>
+    <div class="contact-inner">
+
+      <div class="contact-left rv">
+        <h2>Let's build<br>something <em>great</em><br>together.</h2>
+        <p>Whether you're a brand looking to grow, a creator seeking representation, or a software partner — we'd like to hear from you.</p>
+        <div class="contact-details">
+          <div class="contact-detail">
+            <span class="contact-detail-label">Email</span>
+            <span class="contact-detail-val">
+              <a href="mailto:hello@s23operations.com">hello@s23operations.com</a>
+            </span>
+          </div>
+          <div class="contact-detail">
+            <span class="contact-detail-label">Address</span>
+            <span class="contact-detail-val">124–128 City Road<br>London, EC1V 2NX</span>
+          </div>
+          <div class="contact-detail">
+            <span class="contact-detail-label">Subsidiaries</span>
+            <span class="contact-detail-val">
+              <a href="https://socialsculp.io" target="_blank" rel="noopener">SocialSculp</a> &nbsp;·&nbsp;
+              <a href="https://sylcroad.com" target="_blank" rel="noopener">Sylcroad</a>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-right rv d1">
+        <form class="contact-form" id="contactForm" novalidate>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="f-name">Name</label>
+              <input type="text" id="f-name" name="name" placeholder="Your name" required />
+            </div>
+            <div class="form-field">
+              <label for="f-company">Company</label>
+              <input type="text" id="f-company" name="company" placeholder="Your company" />
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="f-email">Email</label>
+            <input type="email" id="f-email" name="email" placeholder="your@email.com" required />
+          </div>
+          <div class="form-field">
+            <label for="f-type">I'm enquiring as a…</label>
+            <select id="f-type" name="type" required>
+              <option value="" disabled selected>Select one</option>
+              <option value="brand">Brand / Advertiser</option>
+              <option value="creator">Creator / Talent</option>
+              <option value="software">Software Partner</option>
+              <option value="investor">Investor</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="f-message">Message</label>
+            <textarea id="f-message" name="message" placeholder="Tell us what you're working on…" required></textarea>
+          </div>
+          <button type="submit" class="form-submit">Send Message</button>
+        </form>
+        <div class="form-success" id="formSuccess">
+          <h3>Message sent.</h3>
+          <p>We'll be in touch shortly.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">S23<b>.</b> Operations Ltd</div>
+    <ul class="footer-links">
+      <li><a href="https://socialsculp.io" target="_blank" rel="noopener">SocialSculp</a></li>
+      <li><a href="https://sylcroad.com" target="_blank" rel="noopener">Sylcroad</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <p class="footer-copy">© 2025 S23 Operations Ltd · 124–128 City Road, London, EC1V 2NX</p>
+  </footer>
+
+  <script>
+    /* ── Cursor ── */
+    const dot = document.getElementById('c-dot');
+    const ring = document.getElementById('c-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.transform = `translate(${mx - 4}px, ${my - 4}px)`;
+    });
+
+    (function animRing() {
+      rx += (mx - rx - 20) * 0.1;
+      ry += (my - ry - 20) * 0.1;
+      ring.style.transform = `translate(${rx}px, ${ry}px)`;
+      requestAnimationFrame(animRing);
+    })();
+
+    /* ── Nav ── */
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('stuck', window.scrollY > 50);
+    }, { passive: true });
+
+    /* ── Scroll Reveal ── */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+    /* ── Contact Form ── */
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const form = this;
+      const name = form.querySelector('#f-name').value.trim();
+      const email = form.querySelector('#f-email').value.trim();
+      const type = form.querySelector('#f-type').value;
+      const message = form.querySelector('#f-message').value.trim();
+      if (!name || !email || !type || !message) return;
+      // Opens mail client with pre-filled content as fallback
+      const subject = encodeURIComponent('S23 Enquiry — ' + form.querySelector('#f-type options:checked, #f-type').options[form.querySelector('#f-type').selectedIndex].text);
+      const body = encodeURIComponent(
+        'Name: ' + name + '\n' +
+        'Company: ' + (form.querySelector('#f-company').value.trim() || '—') + '\n' +
+        'Email: ' + email + '\n' +
+        'Type: ' + form.querySelector('#f-type').options[form.querySelector('#f-type').selectedIndex].text + '\n\n' +
+        message
+      );
+      window.location.href = 'mailto:hello@s23operations.com?subject=' + subject + '&body=' + body;
+      form.style.display = 'none';
+      document.getElementById('formSuccess').classList.add('show');
+    });
+  </script>
+</body>
+</html>
