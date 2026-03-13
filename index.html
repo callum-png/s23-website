@@ -58,128 +58,110 @@
       position: fixed;
       inset: 0;
       z-index: 99999;
-      background: var(--bg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
       overflow: hidden;
+      pointer-events: all;
     }
 
+    /* Two curtain panels */
+    #loader-top, #loader-bottom {
+      position: absolute;
+      left: 0; right: 0;
+      background: var(--bg);
+      z-index: 1;
+      will-change: transform;
+      transition: transform 0.9s cubic-bezier(0.76, 0, 0.24, 1);
+    }
+    #loader-top    { top: 0;    height: 50.5%; }
+    #loader-bottom { bottom: 0; height: 50.5%; }
+
+    #loader.exit #loader-top    { transform: translateY(-101%); }
+    #loader.exit #loader-bottom { transform: translateY(101%); }
+
+    /* Center content */
     #loader-content {
-      position: relative;
-      z-index: 10;
-      text-align: center;
+      position: absolute;
+      inset: 0;
+      z-index: 2;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
+      gap: 0;
       pointer-events: none;
+      transition: opacity 0.25s ease;
     }
+    #loader.exit #loader-content { opacity: 0; }
 
+    /* Logo */
+    .loader-logo-clip {
+      overflow: hidden;
+      padding-bottom: 4px;
+    }
     #loader-logo-text {
       font-family: 'Syne', sans-serif;
       font-weight: 800;
-      font-size: 1.6rem;
-      letter-spacing: 0.28em;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      letter-spacing: 0.18em;
+      margin-right: -0.18em; /* compensate trailing letter-spacing so it centres perfectly */
       text-transform: uppercase;
       color: var(--text);
-      opacity: 0;
-      animation: loaderFadeIn 0.5s ease forwards 0.25s;
+      display: block;
+      transform: translateY(110%);
+      animation: loaderSlideUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s;
     }
-    #loader-logo-text b { color: var(--accent); }
+    #loader-logo-text b { color: var(--accent); font-weight: 800; }
 
+    /* Divider line */
+    #loader-line {
+      width: 0;
+      height: 1px;
+      background: var(--border-light);
+      margin: 22px 0 18px;
+      animation: loaderLineExpand 0.6s ease forwards 0.7s;
+    }
+    @keyframes loaderLineExpand {
+      to { width: 120px; }
+    }
+
+    /* Sub text */
+    .loader-sub-clip {
+      overflow: hidden;
+    }
     #loader-sub {
       font-family: 'Syne', sans-serif;
       font-size: 0.58rem;
-      letter-spacing: 0.42em;
+      letter-spacing: 0.38em;
+      margin-right: -0.38em;
       text-transform: uppercase;
       color: var(--muted);
-      opacity: 0;
-      animation: loaderFadeIn 0.5s ease forwards 0.5s;
+      display: block;
+      transform: translateY(110%);
+      animation: loaderSlideUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.55s;
     }
 
+    /* Progress bar */
     #loader-bar-wrap {
-      width: 100px;
+      width: 80px;
       height: 1px;
       background: var(--border);
-      margin-top: 28px;
+      margin-top: 32px;
       overflow: hidden;
       opacity: 0;
-      animation: loaderFadeIn 0.4s ease forwards 0.65s;
+      animation: loaderFadeIn 0.3s ease forwards 0.7s;
     }
     #loader-bar {
       height: 100%;
       width: 0%;
       background: var(--accent);
-      transition: width 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: width 0.85s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
+    @keyframes loaderSlideUp {
+      to { transform: translateY(0); }
+    }
     @keyframes loaderFadeIn {
       to { opacity: 1; }
     }
-
-    /* Crack SVG */
-    #crack-svg {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 5;
-    }
-
-    #crack-svg path {
-      fill: none;
-      stroke: var(--accent);
-      stroke-width: 0.35;
-      opacity: 0.75;
-      stroke-dasharray: 200;
-      stroke-dashoffset: 200;
-    }
-
-    #loader.cracking #crack-svg path {
-      animation: crackDraw 0.3s ease forwards;
-    }
-    #loader.cracking #c1  { animation-delay: 0.00s; }
-    #loader.cracking #c2  { animation-delay: 0.05s; }
-    #loader.cracking #c3  { animation-delay: 0.03s; }
-    #loader.cracking #c4  { animation-delay: 0.09s; }
-    #loader.cracking #c5  { animation-delay: 0.13s; }
-    #loader.cracking #c6  { animation-delay: 0.07s; }
-    #loader.cracking #c7  { animation-delay: 0.11s; }
-    #loader.cracking #c8  { animation-delay: 0.02s; }
-    #loader.cracking #c9  { animation-delay: 0.22s; }
-    #loader.cracking #c10 { animation-delay: 0.26s; }
-    #loader.cracking #c11 { animation-delay: 0.18s; }
-    #loader.cracking #c12 { animation-delay: 0.30s; }
-
-    @keyframes crackDraw {
-      to { stroke-dashoffset: 0; }
-    }
-
-    /* Flash on break */
-    #loader.breaking #loader-content { opacity: 0; transition: opacity 0.15s; }
-    #loader.breaking #crack-svg path { opacity: 1; stroke: #fff; transition: stroke 0.1s, opacity 0.1s; }
-
-    /* Shards */
-    .shard {
-      position: absolute;
-      inset: 0;
-      background: var(--bg);
-      z-index: 6;
-      will-change: transform, opacity;
-      transition: transform 0.8s cubic-bezier(0.6, 0, 0.98, 0.5),
-                  opacity 0.8s ease;
-    }
-    .shard-top    { clip-path: polygon(0 0, 100% 0, 50% 50%); }
-    .shard-right  { clip-path: polygon(100% 0, 100% 100%, 50% 50%); }
-    .shard-bottom { clip-path: polygon(0 100%, 100% 100%, 50% 50%); }
-    .shard-left   { clip-path: polygon(0 0, 0 100%, 50% 50%); }
-
-    #loader.breaking .shard-top    { transform: translateY(-112%) rotate(-5deg); opacity: 0; }
-    #loader.breaking .shard-right  { transform: translateX(112%) rotate(5deg);  opacity: 0; }
-    #loader.breaking .shard-bottom { transform: translateY(112%) rotate(5deg);  opacity: 0; }
-    #loader.breaking .shard-left   { transform: translateX(-112%) rotate(-5deg); opacity: 0; }
 
     /* ── CURSOR (pointer devices only) ─────────────── */
     #c-dot, #c-ring { display: none; }
@@ -685,24 +667,89 @@
     }
 
     /* ── RESPONSIVE ────────────────────────────────── */
+
+    /* Tablet (≤ 1024px) */
+    @media (max-width: 1024px) {
+      .hero { padding: 0 40px 72px; }
+      .sec  { padding: 100px 40px; }
+      nav   { padding: 24px 40px; }
+      .clients-sec, .talent-sec { padding: 72px 40px; }
+      .contact-sec { padding: 100px 40px; }
+      footer { padding: 44px 40px; }
+    }
+
+    /* Mobile landscape / small tablet (≤ 900px) */
     @media (max-width: 900px) {
       nav { padding: 20px 24px; }
       .nav-links { display: none; }
-      .hero { padding: 0 24px 60px; }
-      .sec { padding: 80px 24px; }
-      .about-grid { grid-template-columns: 1fr; gap: 48px; }
-      .stats-row { grid-template-columns: 1fr 1fr; }
+
+      .hero { padding: 120px 24px 60px; min-height: 100svh; }
+      .hero-footer { flex-direction: column; align-items: flex-start; gap: 32px; }
+      .hero-kpis { text-align: left; }
+      .hero-scroll { margin-top: 40px; }
+
+      .sec  { padding: 72px 24px; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .stats-row { grid-template-columns: 1fr 1fr; margin-top: 56px; }
+      .stat-cell { padding: 28px 24px; }
+
+      .clients-sec { padding: 56px 24px; }
+      .clients-scroll { flex-wrap: wrap; }
+      .client-name { padding: 18px 24px; font-size: 0.72rem; }
+
       .portfolio-cards { grid-template-columns: 1fr; }
+      .p-card { padding: 44px 36px 80px; }
+      .p-card-arrow { bottom: 36px; right: 36px; }
+
       .cap-grid { grid-template-columns: 1fr 1fr; }
-      .talent-inner { flex-direction: column; align-items: flex-start; }
-      footer { flex-direction: column; gap: 20px; }
-      .clients-sec { padding: 60px 24px; }
-      .talent-sec { padding: 60px 24px; }
+      .cap-item { padding: 40px 32px; }
+
+      .talent-sec { padding: 56px 24px; }
+      .talent-inner { flex-direction: column; align-items: flex-start; gap: 36px; }
+      .talent-names { flex-wrap: wrap; }
+
+      .contact-sec { padding: 72px 24px; }
+      .contact-inner { grid-template-columns: 1fr; gap: 48px; }
+      .form-row { grid-template-columns: 1fr; }
+
+      footer { padding: 40px 24px; flex-direction: column; align-items: flex-start; gap: 20px; }
     }
+
+    /* Mobile portrait (≤ 560px) */
     @media (max-width: 560px) {
-      .stats-row { grid-template-columns: 1fr; }
+      .hero { padding: 100px 20px 52px; }
+      .hero-eyebrow { font-size: 0.6rem; }
+      .hero-scroll { display: none; }
+
+      .sec  { padding: 60px 20px; }
+      .sec-label { margin-bottom: 40px; }
+
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .stat-n { font-size: 2.4rem; }
+
+      .about-h2 { line-height: 1.1; }
+
+      .clients-sec { padding: 48px 20px; }
+      .client-name { padding: 16px 18px; font-size: 0.68rem; }
+
       .cap-grid { grid-template-columns: 1fr; }
-      .hero-footer { flex-direction: column; align-items: flex-start; }
+      .cap-item { padding: 36px 24px; }
+      .cap-n { font-size: 3.5rem; }
+
+      .p-card { padding: 36px 28px 72px; }
+      .p-card-name { font-size: clamp(2.4rem, 10vw, 4rem); }
+      .p-card-arrow { bottom: 28px; right: 28px; width: 44px; height: 44px; }
+
+      .talent-sec { padding: 48px 20px; }
+      .t-name { padding: 14px 20px; font-size: 0.72rem; }
+
+      .contact-sec { padding: 60px 20px; }
+      .contact-left h2 { line-height: 1; }
+      .form-success { padding: 32px 24px; }
+
+      footer { padding: 36px 20px; }
+      .footer-links { flex-wrap: wrap; gap: 20px; }
+      .nav-cta { padding: 9px 16px; font-size: 0.68rem; }
     }
   </style>
 </head>
@@ -710,29 +757,18 @@
 
   <!-- LOADER -->
   <div id="loader">
+    <div id="loader-top"></div>
+    <div id="loader-bottom"></div>
     <div id="loader-content">
-      <span id="loader-logo-text">S23<b>.</b></span>
-      <span id="loader-sub">Operations Ltd</span>
+      <div class="loader-logo-clip">
+        <span id="loader-logo-text">S23<b>.</b></span>
+      </div>
+      <div id="loader-line"></div>
+      <div class="loader-sub-clip">
+        <span id="loader-sub">Operations Ltd</span>
+      </div>
       <div id="loader-bar-wrap"><div id="loader-bar"></div></div>
     </div>
-    <svg id="crack-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-      <path id="c1"  d="M50,50 L80,5"/>
-      <path id="c2"  d="M50,50 L98,35"/>
-      <path id="c3"  d="M50,50 L92,80 L98,96"/>
-      <path id="c4"  d="M50,50 L58,100"/>
-      <path id="c5"  d="M50,50 L20,100"/>
-      <path id="c6"  d="M50,50 L3,70"/>
-      <path id="c7"  d="M50,50 L8,18"/>
-      <path id="c8"  d="M50,50 L44,0"/>
-      <path id="c9"  d="M65,28 L72,8"/>
-      <path id="c10" d="M83,72 L93,78"/>
-      <path id="c11" d="M26,78 L15,92"/>
-      <path id="c12" d="M22,32 L10,22"/>
-    </svg>
-    <div class="shard shard-top"></div>
-    <div class="shard shard-right"></div>
-    <div class="shard shard-bottom"></div>
-    <div class="shard shard-left"></div>
   </div>
 
   <!-- CURSOR -->
@@ -1051,24 +1087,16 @@
 
       document.body.style.overflow = 'hidden';
 
-      // Animate progress bar
-      setTimeout(() => { bar.style.width = '65%'; }, 80);
-      setTimeout(() => { bar.style.width = '100%'; }, 750);
+      setTimeout(() => { bar.style.width = '60%'; }, 80);
+      setTimeout(() => { bar.style.width = '100%'; }, 800);
 
-      // Trigger cracks
       setTimeout(() => {
-        loader.classList.add('cracking');
-
-        // Brief flash then shatter
+        loader.classList.add('exit');
         setTimeout(() => {
-          loader.classList.add('breaking');
-
-          setTimeout(() => {
-            loader.remove();
-            document.body.style.overflow = '';
-          }, 850);
-        }, 520);
-      }, 1350);
+          loader.remove();
+          document.body.style.overflow = '';
+        }, 950);
+      }, 1400);
     })();
 
     /* ── Cursor ── */
